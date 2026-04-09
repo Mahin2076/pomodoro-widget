@@ -80,3 +80,105 @@ document.addEventListener('click', (e) => {
     closeSettings();
   }
 });
+
+// ── Session cycle ─────────────────────────────────────────────
+// Cycle: W SB W SB W SB W LB (repeat)
+const CYCLE = ['work','short','work','short','work','short','work','long'];
+let cycleIndex = 0;
+
+function currentMode() { return CYCLE[cycleIndex]; }
+
+function modeDuration() {
+  switch (currentMode()) {
+    case 'work':  return settings.workMinutes * 60;
+    case 'short': return settings.shortBreakMinutes * 60;
+    case 'long':  return settings.longBreakMinutes * 60;
+  }
+}
+
+function modeLabel() {
+  switch (currentMode()) {
+    case 'work':  return 'WORK';
+    case 'short': return 'SHORT BREAK';
+    case 'long':  return 'LONG BREAK';
+  }
+}
+
+function advanceCycle() {
+  cycleIndex = (cycleIndex + 1) % CYCLE.length;
+}
+
+// ── Timer state machine ───────────────────────────────────────
+// states: idle | running | paused | ended
+let timerState = 'idle';
+let secondsLeft = 0;
+let intervalId  = null;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
+function renderTimerDisplay() {
+  elTimer.textContent = formatTime(secondsLeft);
+  elMode.textContent  = modeLabel();
+  elBtnPlay.textContent = timerState === 'running' ? '⏸' : '▶';
+}
+
+function initSession() {
+  timerState  = 'idle';
+  secondsLeft = modeDuration();
+  renderTimerDisplay();
+}
+
+function startTimer() {
+  if (timerState === 'ended') return;
+  timerState = 'running';
+  elBtnPlay.textContent = '⏸';
+  intervalId = setInterval(() => {
+    secondsLeft--;
+    renderTimerDisplay();
+    if (secondsLeft <= 0) endSession();
+  }, 1000);
+}
+
+function pauseTimer() {
+  timerState = 'paused';
+  clearInterval(intervalId);
+  elBtnPlay.textContent = '▶';
+}
+
+function endSession() {
+  clearInterval(intervalId);
+  timerState = 'ended';
+  secondsLeft = 0;
+  renderTimerDisplay();
+  playChime();
+  triggerCelebration();
+  setTimeout(() => {
+    advanceCycle();
+    initSession();
+  }, 3000);
+}
+
+function skipSession() {
+  clearInterval(intervalId);
+  advanceCycle();
+  initSession();
+}
+
+// ── Button handlers ───────────────────────────────────────────
+elBtnPlay.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (timerState === 'running') pauseTimer();
+  else if (timerState === 'idle' || timerState === 'paused') startTimer();
+});
+
+elBtnSkip.addEventListener('click', (e) => {
+  e.stopPropagation();
+  skipSession();
+});
+
+// ── Init ──────────────────────────────────────────────────────
+initSession();
