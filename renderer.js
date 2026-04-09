@@ -182,3 +182,50 @@ elBtnSkip.addEventListener('click', (e) => {
 
 // ── Init ──────────────────────────────────────────────────────
 initSession();
+
+// ── Web Audio chime ───────────────────────────────────────────
+function playChime() {
+  if (!settings.soundEnabled) return;
+  const ctx = new AudioContext();
+  const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+  notes.forEach((freq, i) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0.18, ctx.currentTime + i * 0.18);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.18 + 0.25);
+    osc.start(ctx.currentTime + i * 0.18);
+    osc.stop(ctx.currentTime + i * 0.18 + 0.3);
+  });
+}
+
+// ── Confetti celebration ──────────────────────────────────────
+const CONFETTI_COLORS = ['#ff4444','#ffaa00','#44ff88','#44aaff','#ff44ff','#ffffff'];
+
+function triggerCelebration() {
+  // Switch tomato to celebrate animation
+  elTomato.classList.add('celebrating');
+  elTomato.addEventListener('animationend', () => {
+    elTomato.classList.remove('celebrating');
+  }, { once: true });
+
+  // Spawn confetti pieces
+  elConfetti.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const angle = Math.random() * 360;
+    const dist  = 30 + Math.random() * 40;
+    const tx = Math.round(Math.cos(angle * Math.PI / 180) * dist);
+    const ty = Math.round(Math.sin(angle * Math.PI / 180) * dist);
+    piece.style.setProperty('--tx', `${tx}px`);
+    piece.style.setProperty('--ty', `${ty}px`);
+    piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    piece.style.animationDelay = `${Math.random() * 0.2}s`;
+    elConfetti.appendChild(piece);
+  }
+  setTimeout(() => { elConfetti.innerHTML = ''; }, 1200);
+}
