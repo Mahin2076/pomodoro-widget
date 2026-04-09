@@ -1,0 +1,46 @@
+# Cute Mini Tomato Pomodoro Timer
+
+Creation of a cute, desktop-widget-style Pomodoro timer using Electron. The app will feature a frameless, transparent window that sits on the desktop, with a premium glassmorphic aesthetic and a "cute tomato" mascot.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - **Figma MCP**: I don't have direct access to a "Figma MCP" in my current environment. If you have a Figma design link, please share it and I can try to read the design using browser tools. Otherwise, I will proceed with the design inspired by the generated image.
+> - **Always on Top**: The widget will be configured to stay on top of other windows by default.
+> - **Draggable**: The entire widget will be draggable from anywhere on the tomato or the transparent glass.
+
+## Proposed Changes
+
+### Project Setup
+- [x] Write `PROJECT_SPEC.md`: Detailed technical requirements and implementation roadmap for AI assistants.
+- [ ] Initialize project: `package.json` with Electron.
+- [ ] Scaffold Main Process: `main.js` with frameless, transparent, always-on-top configuration.
+- [ ] Create UI: `index.html` and `style.css` for the glassmorphic tomato.
+
+### Frontend (Renderer)
+- [NEW] `index.html`: Structure for the tomato mascot, timer display, and controls.
+- [NEW] `style.css`: Premium CSS with glassmorphism, animations, and the tomato character styling.
+- [NEW] `renderer.js`: Timer logic, state management (Work/Break), and interaction handling.
+
+### Assets
+- [NEW] `assets/tomato.svg` (or CSS implementation): A high-quality SVG/CSS representation of the cute tomato.
+
+---
+
+## Open Questions
+
+1. **Figma Link**: Do you have a specific Figma design link you'd like me to follow?
+2. **Timer Intervals**: Should the default be 25/5/15 minutes, or do you want custom interval support from the start?
+3. **Sound Alerts**: Should it play a "ding" or a "cute blink" sound when the timer ends?
+
+## Verification Plan
+
+### Automated Tests
+- N/A for initial prototype, will rely on manual verification.
+
+### Manual Verification
+- Run `npm start` to verify the Electron window launches correctly.
+- Check if transparency and frameless mode work on macOS.
+- Verify the timer decrements correctly and switches cycles.
+- Test draggability across the desktop.
+- Confirm the "Always on Top" behavior.
