@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'">
+  <title>Pomodoro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Settings panel -->
+    <div id="settings-panel" class="hidden">
+      <div class="settings-title">Settings</div>
+      <label>Work (min)<input id="set-work" type="number" min="1" max="99" /></label>
+      <label>Short Break<input id="set-short" type="number" min="1" max="99" /></label>
+      <label>Long Break<input id="set-long" type="number" min="1" max="99" /></label>
+      <label class="sound-toggle">
+        Sound <input id="set-sound" type="checkbox" />
+      </label>
+      <button id="settings-apply">Apply</button>
+    </div>
+
+    <!-- Main widget -->
+    <div id="widget">
+      <div id="mode-label">WORK</div>
+      <div id="tomato-wrap">
+        <div id="tomato"></div>
+        <div id="confetti-container"></div>
+      </div>
+      <div id="timer-display">25:00</div>
+      <div id="controls">
+        <button id="btn-playpause" class="nodrag">▶</button>
+        <button id="btn-skip" class="nodrag">⏭</button>
+      </div>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>
